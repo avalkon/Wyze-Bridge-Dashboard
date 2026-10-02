@@ -1,0 +1,16 @@
+{
+    "users": [
+        {
+            "username": "admin",
+            "password_hash": "$2y$10$PASSWORD_HASH_HERE",
+            "role": "admin",
+            "enabled": true
+        },
+        {
+            "username": "viewer",
+            "password_hash": "PASSWORD_HASH_HERE",
+            "role": "viewer",
+            "enabled": true
+        }
+    ]
+}
