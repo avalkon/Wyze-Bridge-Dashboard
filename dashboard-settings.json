@@ -1,0 +1,28 @@
+{
+  "segment_seconds": 300,
+  "delete_unprotected_after_minutes": 30,
+  "motion_before_seconds": 300,
+  "motion_after_seconds": 300,
+  "keep_motion_days": 30,
+  "cameras": {
+    "camera1": {
+      "enabled": true,
+      "schedule": [
+        {"days": [0,1,2,3,4,5,6], "start": "00:00", "end": "23:59"}]},
+
+    "camera2": {
+      "enabled": true,
+      "schedule": [
+        {"days": [0,1,2,3,4,5,6], "start": "00:00", "end": "23:59"}]},
+      
+    "camera3": {
+      "enabled": true,
+      "schedule": [
+        {"days": [0,1,2,3,4,5,6], "start": "00:00", "end": "23:59"}]},
+
+    "camera4": {
+      "enabled": true,
+      "schedule": [
+        {"days": [0,1,2,3,4,5,6], "start": "00:00", "end": "23:59"}]}
+  }
+}

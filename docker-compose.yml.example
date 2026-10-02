@@ -1,0 +1,66 @@
+services:
+    wyze-bridge:
+        container_name: wyze-bridge
+        restart: unless-stopped
+        image: mrlt8/wyze-bridge:latest
+        ports:
+            - 1935:1935 # RTMP
+            - 8554:8554 # RTSP
+            - 8888:8888 # HLS
+            - 8889:8889 # WebRTC
+            - 8189:8189/udp # WebRTC/ICE
+            - 5000:5000 # WEB-UI
+        environment:
+            - NET_MODE=LAN
+            - CONNECT_TIMEOUT=45
+
+            # [OPTIONAL] Credentials can be set in the WebUI
+            # API Key and ID can be obtained from the wyze dev portal: 
+            # https://developer-api-console.wyze.com/#/apikey/view
+            - WYZE_EMAIL=wyze-login-email-here
+            - WYZE_PASSWORD=wyze-login-password-here
+            - API_ID=wyze-key-id-here
+            - API_KEY=wyze-api-key-here
+            # [OPTIONAL] IP Address of the host to enable WebRTC e.g.,:
+            # - WB_IP=192.168.1.122
+            # WebUI and Stream authentication:
+            - WB_AUTH=False # Set to false to disable web and stream auth.
+            # WB_USERNAME=
+            # WB_PASSWORD=
+
+
+            # ── Model registry overrides ─────────────────────────
+            # Add/replace rows in the camera-model routing table
+            # without recompiling. Format:
+            #   MODEL[:flag=value]*[;MODEL:flag=value,...]
+            # Flags: name, is_gwell, is_gwell_p2p, is_webrtc,
+            # is_pan, is_doorbell.
+            # - MODEL_OVERRIDES=HL_CAM4:is_webrtc=true;GW_NEW:name=Made-up Cam,is_webrtc=true
+
+            - MOTION_API=True
+            - MOTION_INT-1.5
+            - MOTION_START=True
+            - MOTION_WEBHOOKS=http://motion-recorder:8089/motion?cam={cam_name}
+
+        volumes:
+            - ./tokens:/tokens
+            - ./recordings:/record
+
+    motion-recorder:
+        build: ./motion-recorder
+        container_name: motion-recorder
+        restart: unless-stopped
+        depends_on: 
+            - wyze-bridge
+        environment:
+          - WEBHOOK_PORT=8089
+          - SETTINGS_FILE=/config/dashboard-settings.json
+          - EVENT_FILE=/state/events.json
+          - RECORD_ROOT=/recordings
+          - RTSP_BASE=rtsp://wyze-bridge:8554
+          - PROTECTED_FILE=/state/protected.json
+          - umask 0027
+        volumes:
+          - ./config:/config
+          - ./recordings:/recordings
+          - ./motion-state:/state
