@@ -1,0 +1,22 @@
+[Unit]
+Description=Wyze Dashboard Local Helper
+After=docker.service network.target
+Requires=docker.service
+
+[Service]
+Type=simple
+EnvironmentFile=/etc/wyze-dashboard/helper.env
+ExecStart=/usr/bin/python3 /opt/wyze-dashboard/helper.py
+Restart=on-failure
+RestartSec=3
+User=root
+Group=root
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectHome=true
+ProtectSystem=strict
+ReadWritePaths=/opt/wyze
+RestrictAddressFamilies=AF_INET AF_INET6 AF_UNIX
+
+[Install]
+WantedBy=multi-user.target
