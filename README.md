@@ -86,8 +86,8 @@ any necessary settings. Or just use the included one if you don't have any custo
 
 ```bash
 sudo apt install apache2 php libapache2-mod-php php-curl ffmpeg python3
-sudo mkdir -p /var/www/wyze-dashboard
-sudo cp -a web/. /var/www/wyze-dashboard/
+
+sudo cp -r ./var-www-wyze-dashboard /var/www/wyze-dashboard/
 sudo chown -R root:www-data /var/www/wyze-dashboard
 sudo find /var/www/wyze-dashboard -type d -exec chmod 750 {} \;
 sudo find /var/www/wyze-dashboard -type f -exec chmod 640 {} \;
@@ -136,19 +136,17 @@ sudo systemctl enable --now wyze-dashboard-helper
 ## And now the app files
 
 ```bash
+#If you don't already have a .yml:
 sudo cp -r ./opt-wyze /opt/wyze
+#If you do, copy folders individually into /opt/wyze.
 sudo cp -r ./etc-wyze-dashboard /etc/wyze-dashboard
+
 sudo cp -r ./opt-wyze-dashboard /opt/wyze-dashboard
 sudo cp -r ./var-lib-wyze-dashboard /var/lib/wyze-dashboard
-sudo cp -r ./var-www-wyze-dashboard /var/www/wyze-dashboard
 
 sudo groupadd -f wyze-recordings
 sudo usermod -aG wyze-recordings www-data
 sudo usermod -aG wyze-recordings yourusername
-
-sudo chown -R root:www-data /var/www/wyze-dashboard
-sudo find /var/www/wyze-dashboard -type d -exec chmod 750 {} \;
-sudo find /var/www/wyze-dashboard -type f -exec chmod 640 {} \;
 
 sudo chown root:www-data /var/lib/wyze-dashboard
 sudo chmod 770 /var/lib/wyze-dashboard
